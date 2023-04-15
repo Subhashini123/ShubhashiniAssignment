@@ -7,8 +7,11 @@ import com.example.shubhashiniassignment.model.AlbumModel
 
 interface AlbumDbDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addCar(user: AlbumModel.AlbumModelItem): Long
+    suspend fun addPhoto(user: AlbumModel.AlbumModelItem): Long
 
     @Query("Select * from tblAlbum")
-    suspend fun getAllCars(): List<AlbumModel.AlbumModelItem>?
+    suspend fun getTenPhotoAlbumAtOnce(): List<AlbumModel.AlbumModelItem>?
+
+    @Query("Select COUNT(id) From tblAlbum")
+    suspend fun totalRecords(): Int
 }
