@@ -8,5 +8,11 @@
     <string name="convert_to_marathi">Convert to Marathi</string>
     <string name="convert_to_punjabi">Convert to Punjabi</string>
     <string name="convert_to_telugu">Convert to Telugu</string>
+    <string name="convert_to_sp">Convert to Spanish</string>
+    <string name="convert_to_rus">Convert to Russian</string>
+    <string name="convert_to_isis">Convert to Irish</string>
+
     <string name="next">Next Page</string>
+    <string name="no_file_selected">No file selected</string>
+    <string name="upload_file">Upload File</string>
 </resources>
