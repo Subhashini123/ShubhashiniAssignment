@@ -6,9 +6,10 @@ import com.example.shubhashiniassignment.di.DaggerAlbumApplicationComponent
 
 
 class AlbumApplication : Application() {
-    lateinit var appComponent : AlbumApplicationComponent
+    lateinit var appComponent: AlbumApplicationComponent
     override fun onCreate() {
         super.onCreate()
+        // Initialise app component here
         appComponent = DaggerAlbumApplicationComponent.factory().create(applicationContext)
     }
 }

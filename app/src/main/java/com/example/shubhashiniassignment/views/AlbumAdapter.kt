@@ -9,7 +9,6 @@ import com.example.shubhashiniassignment.model.AlbumModel
 import com.squareup.picasso.Picasso
 
 class AlbumAdapter (
-    private val albums: List<AlbumModel.AlbumModelItem>,
     private var listener: RecordSelectListener
     ) : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>(){
 
@@ -33,7 +32,14 @@ class AlbumAdapter (
         override fun getItemCount(): Int {
             return albums.size
         }
+    fun appendList(lst: List<AlbumModel.AlbumModelItem>?) {
+        if (lst.isNullOrEmpty()) {
+            return
+        } else {
+            albums.addAll(lst)
+        }
 
+    }
         inner class AlbumViewHolder(private val itemBinding: AlbumCardBinding): RecyclerView.ViewHolder(itemBinding.root) {
             fun bindItem(model: AlbumModel.AlbumModelItem) {
                 itemBinding.txtAlbumTitle.text = model.title

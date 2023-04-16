@@ -1,32 +1,38 @@
 package com.example.shubhashiniassignment.views
 
+
+
 import android.content.Context
 import android.content.res.Configuration
+import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.util.Log
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.shubhashiniassignment.AlbumApplication
 import com.example.shubhashiniassignment.R
 import com.example.shubhashiniassignment.databinding.FragmentAlbumListBinding
 import com.example.shubhashiniassignment.model.AlbumModel
+import com.example.shubhashiniassignment.utils.TwoPaneOnBackPressedCallback
 import com.example.shubhashiniassignment.viewmodel.AlbumListViewModel
 import com.example.shubhashiniassignment.views.AlbumAdapter.Companion.albums
 import com.squareup.picasso.Picasso
 import java.util.ArrayList
 import javax.inject.Inject
 
+
+
 class AlbumListFragment : Fragment(), AlbumAdapter.RecordSelectListener {
     private lateinit var binding: FragmentAlbumListBinding
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
     var currentIndex: Int = 0
-    var recordsLastId = 1
+    lateinit var adapter: AlbumAdapter
 
     private val viewModel by lazy {
         viewModelFactory.create(
@@ -37,19 +43,23 @@ class AlbumListFragment : Fragment(), AlbumAdapter.RecordSelectListener {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         (requireActivity().application as AlbumApplication).appComponent.inject(this)
-    }
+            }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         binding = FragmentAlbumListBinding.inflate(inflater, container, false)
+        adapter = AlbumAdapter(this@AlbumListFragment)
+        setupRecyclerView(adapter)
+        viewModel.checkIfDbIsEmpty()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        viewModel.checkIfDbIsEmpty()
-        viewModel.setProgressVisibility(true)
+        // Connect the SlidingPaneLayout to the system back button.
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
+            TwoPaneOnBackPressedCallback(binding.twoPaneLayout)
+        )
         observeData()
     }
 
@@ -58,7 +68,7 @@ class AlbumListFragment : Fragment(), AlbumAdapter.RecordSelectListener {
             if (it) {
                 viewModel.fetchPhotoAlbum()
             } else {
-                viewModel.catchPhotosPageWise(currentIndex)
+                callDatabaseToFetchData()
             }
         }
 
@@ -71,21 +81,24 @@ class AlbumListFragment : Fragment(), AlbumAdapter.RecordSelectListener {
         }
 
         viewModel.albumLiveData.observe(viewLifecycleOwner) {
-            setupRecyclerView(it)
             viewModel.setProgressVisibility(false)
+            appendListToRecyclerView(it)
         }
     }
 
-    private fun setupRecyclerView(data: List<AlbumModel.AlbumModelItem>) {
+    private fun callDatabaseToFetchData() {
+        viewModel.catchPhotosPageWise(currentIndex)
+    }
+
+    private fun setupRecyclerView(aAdapter: AlbumAdapter) {
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(context)
-            adapter = AlbumAdapter(data, this@AlbumListFragment)
+            adapter = aAdapter
         }
     }
 
     override fun onRecordSelect(albumModel: AlbumModel.AlbumModelItem) {
         if (isLandScapeView()) {
-
             binding.textATitle?.text = albumModel.title
             Picasso.get()
                 .load(albumModel.url)
@@ -103,18 +116,20 @@ class AlbumListFragment : Fragment(), AlbumAdapter.RecordSelectListener {
     override fun loadMoreDataToRecyclerView(indexPosition: Int) {
         currentIndex = indexPosition
         callDatabaseToFetchData()
-
     }
 
-    private fun callDatabaseToFetchData() {
-        viewModel.catchPhotosPageWise(currentIndex)
+    private fun appendListToRecyclerView(lst: List<AlbumModel.AlbumModelItem>?) {
+        adapter.appendList(lst)
+        adapter.notifyDataSetChanged()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putParcelableArrayList("ALBUMS", albums as ArrayList<AlbumModel.AlbumModelItem>)
     }
+
     private fun isLandScapeView() : Boolean {
         return resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
     }
 }
+
