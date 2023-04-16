@@ -9,6 +9,7 @@ import com.example.shubhashiniassignment.repo.AlbumRepository
 import com.example.shubhashiniassignment.repo.ApiFailed
 import com.example.shubhashiniassignment.repo.ApiSuccess
 import com.example.shubhashiniassignment.repo.SocketTimeout
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -52,9 +53,11 @@ class AlbumListViewModel @Inject constructor(
     }
 
     // get 10 pages at once
-    fun catchCarsPageWise() {
+    fun catchPhotosPageWise(index: Int) {
         viewModelScope.launch {
-            _albumLiveData.value = repo.getAllPhotos()
+            _progressLiveData.value = true
+            delay(750L)
+            _albumLiveData.value = repo.getTenAlbumLegacyWay(index)
             _progressLiveData.value = false
         }
     }

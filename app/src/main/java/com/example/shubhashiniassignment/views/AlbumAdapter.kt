@@ -14,7 +14,9 @@ class AlbumAdapter (
     ) : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>(){
 
         var recordSelectListener: RecordSelectListener = listener
-
+    companion object {
+        var albums: MutableList<AlbumModel.AlbumModelItem> = mutableListOf()
+    }
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlbumViewHolder {
             val v = AlbumCardBinding.inflate(
                 LayoutInflater.from(parent.context),
@@ -48,5 +50,6 @@ class AlbumAdapter (
         }
     interface RecordSelectListener {
         fun onRecordSelect(albumModel: AlbumModel.AlbumModelItem)
+        fun loadMoreDataToRecyclerView(indexPosition: Int)
     }
 }

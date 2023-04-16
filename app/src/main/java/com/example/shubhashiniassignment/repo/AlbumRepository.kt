@@ -1,5 +1,8 @@
 package com.example.shubhashiniassignment.repo
 
+import androidx.lifecycle.LiveData
+import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
 import com.example.shubhashiniassignment.db.AlbumDbDao
 import com.example.shubhashiniassignment.model.AlbumModel
 import com.example.shubhashiniassignment.service.AlbumApiService
@@ -23,8 +26,13 @@ class AlbumRepository @Inject constructor(
         }
     }
 
-    suspend fun getAllPhotos(): List<AlbumModel.AlbumModelItem> {
-        return dao.getTenPhotoAlbumAtOnce() ?: listOf()
+//    suspend fun getAllPagedPhotos(config: PagedList.Config): LiveData<PagedList<AlbumModel.AlbumModelItem>> {
+//        val factory = dao.getTenPhotoAlbumAtOnce()
+//        return LivePagedListBuilder(factory, config).build()
+//    }
+
+    suspend fun getTenAlbumLegacyWay(index: Int) : List<AlbumModel.AlbumModelItem>?{
+        return dao.getAlbumInLegacyWay(index)
     }
 
     suspend fun savePhotosInDb(photoAlbums: List<AlbumModel.AlbumModelItem>) {

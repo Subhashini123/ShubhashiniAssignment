@@ -1,6 +1,7 @@
 package com.example.shubhashiniassignment.views
 
 import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,13 +16,16 @@ import com.example.shubhashiniassignment.R
 import com.example.shubhashiniassignment.databinding.FragmentAlbumListBinding
 import com.example.shubhashiniassignment.model.AlbumModel
 import com.example.shubhashiniassignment.viewmodel.AlbumListViewModel
+import com.example.shubhashiniassignment.views.AlbumAdapter.Companion.albums
+import com.squareup.picasso.Picasso
+import java.util.ArrayList
 import javax.inject.Inject
 
 class AlbumListFragment : Fragment(), AlbumAdapter.RecordSelectListener {
     private lateinit var binding: FragmentAlbumListBinding
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
-
+    var currentIndex: Int = 0
     var recordsLastId = 1
 
     private val viewModel by lazy {
@@ -54,7 +58,7 @@ class AlbumListFragment : Fragment(), AlbumAdapter.RecordSelectListener {
             if (it) {
                 viewModel.fetchPhotoAlbum()
             } else {
-                viewModel.catchCarsPageWise()
+                viewModel.catchPhotosPageWise(currentIndex)
             }
         }
 
@@ -80,9 +84,37 @@ class AlbumListFragment : Fragment(), AlbumAdapter.RecordSelectListener {
     }
 
     override fun onRecordSelect(albumModel: AlbumModel.AlbumModelItem) {
-        findNavController().navigate(
-            R.id.detailedFragment,
-            bundleOf("ID" to albumModel.id, "TITLE" to albumModel.title, "URL" to albumModel.url)
-        )
+        if (isLandScapeView()) {
+
+            binding.textATitle?.text = albumModel.title
+            Picasso.get()
+                .load(albumModel.url)
+                .fit()
+                .placeholder(R.drawable.ic_launcher_foreground)
+                .into(binding.imgThumbBig)
+        } else {
+            findNavController().navigate(
+                R.id.detailedFragment,
+                bundleOf("ID" to albumModel.id, "TITLE" to albumModel.title, "URL" to albumModel.url, "ISPORT" to true)
+            )
+        }
+    }
+
+    override fun loadMoreDataToRecyclerView(indexPosition: Int) {
+        currentIndex = indexPosition
+        callDatabaseToFetchData()
+
+    }
+
+    private fun callDatabaseToFetchData() {
+        viewModel.catchPhotosPageWise(currentIndex)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putParcelableArrayList("ALBUMS", albums as ArrayList<AlbumModel.AlbumModelItem>)
+    }
+    private fun isLandScapeView() : Boolean {
+        return resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
     }
 }
