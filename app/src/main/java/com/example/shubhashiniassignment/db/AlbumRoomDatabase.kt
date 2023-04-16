@@ -1,11 +1,13 @@
 package com.example.shubhashiniassignment.db
 
 import android.content.Context
+import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.shubhashiniassignment.model.AlbumModel
 
 // Offline database
-
+@Database(entities = [AlbumModel.AlbumModelItem::class], version = 1, exportSchema = false)
 abstract class AlbumRoomDatabase : RoomDatabase() {
 
  abstract fun albumDao() : AlbumDbDao

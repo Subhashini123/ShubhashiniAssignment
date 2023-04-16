@@ -14,4 +14,9 @@
         android:name="com.example.shubhashiniassignment.views.AlbumListFragment"
         android:label="fragment_album_list"
         tools:layout="@layout/fragment_album_list" />
+    <fragment
+        android:id="@+id/detailedFragment"
+        android:name="com.example.shubhashiniassignment.views.DetailedFragment"
+        android:label="fragment_detailed"
+        tools:layout="@layout/fragment_detailed" />
 </navigation>
