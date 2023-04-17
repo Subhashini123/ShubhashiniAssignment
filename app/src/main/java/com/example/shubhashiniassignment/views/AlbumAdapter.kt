@@ -27,6 +27,9 @@ class AlbumAdapter (
 
         override fun onBindViewHolder(holder: AlbumViewHolder, position: Int) {
             holder.bindItem(albums[position])
+            if (position == albums.size - 1) {
+                listener.loadMoreDataToRecyclerView(position+1)
+            }
         }
 
         override fun getItemCount(): Int {

@@ -3,12 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/convertFragment">
-    <fragment
-        android:id="@+id/convertFragment"
-        android:name="com.example.shubhashiniassignment.views.TextConvertFragment"
-        tools:layout="@layout/fragment_text_convert" >
-    </fragment>
+    app:startDestination="@id/albumListFragment">
+
     <fragment
         android:id="@+id/albumListFragment"
         android:name="com.example.shubhashiniassignment.views.AlbumListFragment"
