@@ -76,7 +76,7 @@ dependencies {
     // Piccasso Image Lib
     implementation 'com.squareup.picasso:picasso:2.8'
 
-    // Dagger DI
+    //Added Dagger DI - [Remove Hilt dependency Injection]
     implementation 'com.google.dagger:dagger:2.42'
     kapt 'com.google.dagger:dagger-compiler:2.42'
 

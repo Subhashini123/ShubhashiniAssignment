@@ -9,6 +9,7 @@ import com.example.shubhashiniassignment.repo.AlbumRepository
 import com.example.shubhashiniassignment.repo.ApiFailed
 import com.example.shubhashiniassignment.repo.ApiSuccess
 import com.example.shubhashiniassignment.repo.SocketTimeout
+import com.example.shubhashiniassignment.utils.SingleLiveDataEvent
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -16,8 +17,8 @@ import javax.inject.Inject
 class AlbumListViewModel @Inject constructor(
     private var repo: AlbumRepository
 ): ViewModel() {
-    private var _albumLiveData = MutableLiveData<List<AlbumModel.AlbumModelItem>>()
-    val albumLiveData: LiveData<List<AlbumModel.AlbumModelItem>> = _albumLiveData
+    private var _albumLiveData = SingleLiveDataEvent<List<AlbumModel.AlbumModelItem>>()
+    val albumLiveData: SingleLiveDataEvent<List<AlbumModel.AlbumModelItem>> = _albumLiveData
 
     private var _progressLiveData = MutableLiveData<Boolean>()
     val progressLiveData: LiveData<Boolean> = _progressLiveData

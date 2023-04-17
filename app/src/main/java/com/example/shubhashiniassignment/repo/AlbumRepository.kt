@@ -26,11 +26,6 @@ class AlbumRepository @Inject constructor(
         }
     }
 
-//    suspend fun getAllPagedPhotos(config: PagedList.Config): LiveData<PagedList<AlbumModel.AlbumModelItem>> {
-//        val factory = dao.getTenPhotoAlbumAtOnce()
-//        return LivePagedListBuilder(factory, config).build()
-//    }
-
     suspend fun getTenAlbumLegacyWay(index: Int) : List<AlbumModel.AlbumModelItem>?{
         return dao.getAlbumInLegacyWay(index)
     }

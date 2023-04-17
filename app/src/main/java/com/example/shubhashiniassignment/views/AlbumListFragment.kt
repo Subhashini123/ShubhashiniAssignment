@@ -42,7 +42,8 @@ class AlbumListFragment : Fragment(), AlbumAdapter.RecordSelectListener {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         (requireActivity().application as AlbumApplication).appComponent.inject(this)
-            }
+
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
